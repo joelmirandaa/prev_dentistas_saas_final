@@ -48,9 +48,11 @@ if ($uri === 'login.php' || $uri === 'login' || $uri === 'logout.php' || $uri ==
     $controller = new \App\Controllers\AuthController($pdo);
     if (strpos($uri, 'logout') !== false) {
         $controller->logout();
-    } elseif ($uri === 'actions/login_handler.php') {
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        // POST para /login ou rota legada: processa a autenticação
         $controller->login();
     } else {
+        // GET para /login ou /login.php: exibe o formulário
         $controller->showLogin();
     }
     exit;
