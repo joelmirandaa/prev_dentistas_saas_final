@@ -5,7 +5,10 @@
  */
 
 require_once __DIR__ . '/../app/autoload.php';
-require_once __DIR__ . '/../config/database.php';
+
+use App\Database\Connection;
+
+$pdo = Connection::getInstance();
 
 $cores = [
     'sucesso' => "\033[0;32m",

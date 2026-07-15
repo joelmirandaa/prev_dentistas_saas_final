@@ -119,10 +119,8 @@ class AtendimentoController extends BaseController
                     $quantidade = intval($procedimentosInput['quantidade'][$key]);
                     if (!$idProcedimento || $quantidade <= 0) continue;
 
-                    // Busca detalhes do procedimento garantindo o tenant
-                    $stmtProc = $this->pdo->prepare("SELECT id, nome, categoria, valor_base FROM procedimentos WHERE id = ? AND clinica_id = ?");
-                    $stmtProc->execute([$idProcedimento, $this->clinicaId]);
-                    $procedimento = $stmtProc->fetch();
+                    // Busca detalhes do procedimento garantindo o tenant via Model
+                    $procedimento = $this->procedimentoModel->getById((int)$idProcedimento);
                     
                     if (!$procedimento) throw new Exception("Procedimento com ID $idProcedimento não encontrado nesta clínica.");
 

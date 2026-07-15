@@ -6,7 +6,10 @@
 
 require_once __DIR__ . '/../app/autoload.php';
 require_once __DIR__ . '/../config/app.php';
-require_once __DIR__ . '/../config/database.php';
+
+use App\Database\Connection;
+
+$pdo = Connection::getInstance();
 
 use App\Models\Atendimento;
 use App\Models\Despesa;
@@ -15,7 +18,7 @@ use App\Services\FinanceiroService;
 use App\Models\Config;
 
 echo "INICIANDO TESTE DE INTEGRAÇÃO DO BANCO DE DADOS (VIA DOCKER)...\n";
-echo "Host: " . ($host ?? 'localhost') . "\n";
+echo "Host: " . (require __DIR__ . '/../config/database.php')['host'] . "\n";
 echo "Banco: " . ($db_name ?? '') . "\n\n";
 
 try {

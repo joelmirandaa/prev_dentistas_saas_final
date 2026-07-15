@@ -6,13 +6,15 @@
 
 require_once __DIR__ . '/../app/autoload.php';
 require_once __DIR__ . '/../config/app.php';
+require_once __DIR__ . '/../config/session.php';
+require_once __DIR__ . '/../config/controle_acesso.php';
 
-// Ajusta o include_path para que os requires legados continuem funcionando
-set_include_path(get_include_path() . PATH_SEPARATOR . realpath(__DIR__ . '/../'));
-
-require_once 'config/session.php';
-require_once 'config/database.php';
-require_once 'config/controle_acesso.php';
+try {
+    $pdo = \App\Database\Connection::getInstance();
+} catch (\Exception $exception) {
+    http_response_code(503);
+    exit('Serviço temporariamente indisponível. Tente novamente mais tarde.');
+}
 
 // Normalização da URI para roteamento
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -218,22 +220,6 @@ if (strpos($uri, 'clinica') === 0) {
     exit;
 }
 
-// --- COMPATIBILIDADE LEGADA ---
-
-$legacy_file_path = realpath(__DIR__ . '/../' . ltrim($uri, '/'));
-
-if ($legacy_file_path && is_file($legacy_file_path) && strpos($legacy_file_path, realpath(__DIR__ . '/../')) === 0) {
-    $extension = pathinfo($legacy_file_path, PATHINFO_EXTENSION);
-    $static_extensions = ['css', 'js', 'jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'pdf'];
-    
-    if (in_array(strtolower($extension), $static_extensions)) {
-        return false; 
-    }
-    
-    require_once $legacy_file_path;
-    exit;
-}
-
 // Erro 404
 http_response_code(404);
-echo "Erro 404: Página não encontrada no sistema MVC/Legado.";
+echo "Erro 404: Página não encontrada.";

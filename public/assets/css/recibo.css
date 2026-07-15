@@ -1,0 +1,92 @@
+    <style>
+        body {
+            background-color: #f0f2f5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2rem;
+            line-height: 1.6;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+        #recibo {
+            background: white;
+            padding: 2.5rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .header-recibo {
+            text-align: center;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        .header-recibo h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+        .header-recibo p {
+            margin: 0.3rem 0;
+            color: #666;
+        }
+        .section {
+            margin-bottom: 1.5rem;
+        }
+        .section h2 {
+            font-size: 1.2rem;
+            color: #555;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .procedimentos-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .procedimentos-table th,
+        .procedimentos-table td {
+            padding: 0.8rem;
+            border: 1px solid #e9ecef;
+            text-align: left;
+        }
+        .procedimentos-table th {
+            background-color: #f8f9fa;
+        }
+        .total {
+            text-align: right;
+            margin-top: 1.5rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--success-color);
+        }
+        .declaracao {
+            margin-top: 2rem;
+            text-align: justify;
+        }
+        .assinatura {
+            margin-top: 3rem;
+            text-align: center;
+        }
+        .assinatura-linha {
+            border-bottom: 1px solid #333;
+            width: 300px;
+            margin: 0 auto;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        @media print {
+            body {

@@ -1,0 +1,180 @@
+<style>
+    .grid-container { display: grid; grid-template-columns: repeat(12, 1fr); gap: 1rem; }
+    .grid-col-2 { grid-column: span 2; }
+    .grid-col-3 { grid-column: span 3; }
+    .grid-col-4 { grid-column: span 4; }
+    .grid-col-6 { grid-column: span 6; }
+    fieldset { border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem; border-radius: 5px; }
+    legend { font-weight: bold; padding: 0 0.5rem; }
+    .procedimento-row, .pagamento-row { display: flex; align-items: center; margin-bottom: 10px; }
+    .procedimento-row select, .procedimento-row input, .pagamento-row select, .pagamento-row input { margin-right: 10px; }
+
+    #btn_limpar_paciente { width: 140px; margin-left: 10px; }
+    .toast { position: fixed; top: 20px; right: 20px; padding: 15px 20px; border-radius: 5px; color: white; font-size: 16px; z-index: 9999; opacity: 0; visibility: hidden; transition: opacity 0.5s, visibility 0.5s, transform 0.5s; transform: translateX(100%); }
+    .toast.show { opacity: 1; visibility: visible; transform: translateX(0); }
+    .toast.error { background-color: #c0392b; }
+    .toast.success { background-color: #27ae60; }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 10000; /* Increased z-index to be on top of everything */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal.show {
+        display: flex;
+    }
+
+    .modal-content {
+        background-color: white;
+        padding: 25px;
+        border-radius: 8px;
+        width: 500px; /* Increased width */
+        box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Regras gerais para todos os botões */
+    .btn, button, input[type="submit"] {
+        border-radius: var(--border-radius); /* 30px conforme o login.php */
+        padding: 10px 25px;
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    /* Botão Primário (Azul do padrão) */
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: #ffffff;
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary { 
+        background-color: var(--secondary-color); 
+        color: #ffffff; 
+    }
+
+    .btn-secondary:hover { 
+        background-color: #28a745; 
+    }
+
+
+    /* Botão Sucesso (Verde - Corrigido para estar sempre visível) */
+    .btn-success {
+        background-color: #28a745; 
+        color: #ffffff;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    /* Botão Perigo/Erro (Vermelho - Corrigido para estar sempre visível) */
+    .btn-danger {
+        background-color: #dc3545;
+        color: #ffffff;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        transform: translateY(-2px);
+    }
+
+    /* Botão Alerta (Amarelo - Corrigido para estar sempre visível) */
+    .btn-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        transform: translateY(-2px);
+    }
+
+    .btn-info { 
+        background-color: var(--info-color); 
+        color:  #ffffff; 
+    }
+    .btn-info:hover { 
+        background-color: #138496; 
+    }
+
+    /* Definição do botão Cancelar */
+    .btn-cancel {
+        background-color: #17a2b8; /* Cor sólida (Equivalente ao Info) */
+        color: #ffffff !important;
+        border: none;
+        
+        /* Padrão do login.php */
+        font-family: 'Open Sans', sans-serif;
+        font-weight: 600;
+        border-radius: var(--border-radius); /* Usa os 30px definidos no :root */
+        padding: 10px 25px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    /* Estado quando passa o mouse */
+    .btn-cancel:hover {
+        background-color: #138496; /* Cor um pouco mais escura */
+        color: #ffffff !important;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        text-decoration: none;
+    }
+
+    /* ESTILOS DO ODONTOGRAMA RESPONSIVO (DO NOVO_ATENDIMENTO3) */
+    .canvas-container {
+        position: relative;
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        line-height: 0;
+    }
+
+    .img-odontograma {
+        display: block;
+        width: 100%;
+        height: auto;
+        position: relative;
+        z-index: 1;
+    }
+
+    .odontograma-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        pointer-events: none; /* Deixa o clique passar para o map */
+    }
+
+    area {
+        cursor: pointer;
+        outline: none;
+    }
+</style>

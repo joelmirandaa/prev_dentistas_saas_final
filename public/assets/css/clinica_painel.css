@@ -1,0 +1,11 @@
+<style>
+.tabs { overflow: hidden; border-bottom: 1px solid #ccc; margin-bottom: 20px; }
+.tab-link { background-color: inherit; float: left; border: none; outline: none; cursor: pointer; padding: 14px 16px; transition: 0.3s; font-size: 17px; }
+.tab-link:hover { background-color: #ddd; }
+.tab-link.active { border-bottom: 3px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
+.tab-content { display: none; padding: 6px 12px; animation: fadeEffect 0.5s; }
+@keyframes fadeEffect { from {opacity: 0;} to {opacity: 1;} }
+.success { color: green; background: #e8f5e9; padding: 1rem; border-radius: 6px; }
+.error   { color: red;   background: #ffebee; padding: 1rem; border-radius: 6px; }
+.btn-sm { padding: 5px 10px; font-size: 0.8rem; }
+.readonly-field { background-color: #f0f0f0 !important; cursor: not-allowed; border-color: #ddd !important; }

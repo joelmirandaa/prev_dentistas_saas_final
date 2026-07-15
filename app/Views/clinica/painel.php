@@ -1,14 +1,5 @@
 <?php
-/**
- * Helper para formatar CNPJ (##.###.###/####-##)
- */
-function formatarCNPJ($cnpj) {
-    $cnpj = preg_replace('/\D/', '', $cnpj);
-    if (strlen($cnpj) === 14) {
-        return preg_replace('/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/', '$1.$2.$3/$4-$5', $cnpj);
-    }
-    return $cnpj;
-}
+use App\Helpers\FormatHelper;
 ?>
 <div class="card">
     <h2>Configurações da Clínica</h2>
@@ -36,7 +27,7 @@ function formatarCNPJ($cnpj) {
             </div>
             <div class="form-group">
                 <label>CNPJ</label>
-                <input type="text" name="cnpj" value="<?= htmlspecialchars(formatarCNPJ($clinica['cnpj'] ?? '')) ?>" oninput="mascaraCNPJ(this)" readonly class="readonly-field">
+                <input type="text" name="cnpj" value="<?= htmlspecialchars(FormatHelper::cnpj($clinica['cnpj'] ?? '')) ?>" oninput="mascaraCNPJ(this)" readonly class="readonly-field">
             </div>
             <div style="margin-top: 1rem; display: flex; gap: 10px;">
                 <button type="button" class="btn btn-secondary" onclick="toggleEdit('dados')">Editar</button>
@@ -181,110 +172,6 @@ function formatarCNPJ($cnpj) {
     </div>
 </div>
 
-<script>
-function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tab-content");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tab-link");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
+<script src="<?= BASE_URL ?>assets/js/modules/clinica_painel.js"></script>
 
-function editTaxa(data) {
-    document.getElementById('taxa_id').value = data.id;
-    document.getElementById('taxa_bandeira').value = data.bandeira;
-    document.getElementById('taxa_modalidade').value = data.modalidade;
-    document.getElementById('taxa_parcelas').value = data.parcelas;
-    document.getElementById('taxa_percentual').value = data.taxa_percentual;
-    
-    window.scrollTo({ top: document.getElementById('form-taxa').offsetTop - 100, behavior: 'smooth' });
-}
-
-function resetTaxaForm() {
-    document.getElementById('form-taxa').reset();
-    document.getElementById('taxa_id').value = '';
-}
-
-function toggleEdit(tabId) {
-    const container = document.getElementById(tabId);
-    const inputs = container.querySelectorAll('input:not([type="hidden"]), select, textarea');
-    const buttons = container.querySelectorAll('button');
-    
-    let editBtn, saveBtn, cancelBtn;
-    buttons.forEach(btn => {
-        if (btn.innerText === 'Editar') editBtn = btn;
-        if (btn.type === 'submit') saveBtn = btn;
-        if (btn.innerText === 'Cancelar') cancelBtn = btn;
-    });
-
-    const isLocked = inputs[0].hasAttribute('readonly') || inputs[0].hasAttribute('disabled');
-
-    if (isLocked) {
-        // Unlock
-        inputs.forEach(input => {
-            input.removeAttribute('readonly');
-            input.removeAttribute('disabled');
-            input.classList.remove('readonly-field');
-            
-            // Forçar disparar a máscara ao abrir para garantir formatação correta
-            if (input.name === 'cnpj') mascaraCNPJ(input);
-            if (input.name === 'clinica_telefone') mascaraTelefone(input);
-        });
-        editBtn.style.display = 'none';
-        saveBtn.style.display = 'block';
-        cancelBtn.style.display = 'block';
-    } else {
-        // Lock (Reload to reset changes)
-        location.reload();
-    }
-}
-
-function mascaraCNPJ(i) {
-    let v = i.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-    if (v.length > 14) v = v.substring(0, 14); // Limita a 14 dígitos
-
-    // Aplica a máscara progressivamente
-    v = v.replace(/^(\d{2})(\d)/, '$1.$2');
-    v = v.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
-    v = v.replace(/\.(\d{3})(\d)/, '.$1/$2');
-    v = v.replace(/(\d{4})(\d)/, '$1-$2');
-
-    i.value = v;
-}
-
-function mascaraTelefone(i) {
-    let v = i.value.replace(/\D/g, '');
-    if (v.length > 11) v = v.substring(0, 11); // Limita a 11 dígitos (celular com DDD)
-
-    if (v.length > 10) {
-        v = v.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
-    } else if (v.length > 5) {
-        v = v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/, '($1) $2-$3');
-    } else if (v.length > 2) {
-        v = v.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
-    } else if (v.length > 0) {
-        v = v.replace(/^(\d*)/, '($1');
-    }
-
-    i.value = v;
-}
-</script>
-
-<style>
-.tabs { overflow: hidden; border-bottom: 1px solid #ccc; margin-bottom: 20px; }
-.tab-link { background-color: inherit; float: left; border: none; outline: none; cursor: pointer; padding: 14px 16px; transition: 0.3s; font-size: 17px; }
-.tab-link:hover { background-color: #ddd; }
-.tab-link.active { border-bottom: 3px solid var(--primary-color); color: var(--primary-color); font-weight: bold; }
-.tab-content { display: none; padding: 6px 12px; animation: fadeEffect 0.5s; }
-@keyframes fadeEffect { from {opacity: 0;} to {opacity: 1;} }
-.success { color: green; background: #e8f5e9; padding: 1rem; border-radius: 6px; }
-.error   { color: red;   background: #ffebee; padding: 1rem; border-radius: 6px; }
-.btn-sm { padding: 5px 10px; font-size: 0.8rem; }
-.readonly-field { background-color: #f0f0f0 !important; cursor: not-allowed; border-color: #ddd !important; }
-</style>
+<link rel="stylesheet" href="<?= BASE_URL ?>assets/css/clinica_painel.css">

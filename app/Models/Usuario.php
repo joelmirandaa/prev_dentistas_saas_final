@@ -93,7 +93,7 @@ class Usuario {
     }
 
     public function getDentistas() {
-        $stmt = $this->pdo->prepare("SELECT id, nome FROM usuarios WHERE perfil = 'dentista' AND clinica_id = ?");
+        $stmt = $this->pdo->prepare("SELECT id, nome FROM usuarios WHERE perfil = 'dentista' AND clinica_id = ? ORDER BY nome ASC");
         $stmt->execute([$this->clinica_id]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

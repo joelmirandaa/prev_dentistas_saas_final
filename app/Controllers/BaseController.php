@@ -35,14 +35,11 @@ abstract class BaseController
     {
         $header = __DIR__ . '/../Views/partials/header.php';
         $footer = __DIR__ . '/../Views/partials/footer.php';
+        $errorFile = __DIR__ . '/../Views/errors/csrf.php';
 
         if (file_exists($header)) require_once $header;
         
-        echo "<div class='container' style='margin-top: 50px; text-align: center; padding: 40px; background: #fff0f0; border: 1px solid #ffcdd2; border-radius: 8px;'>";
-        echo "<h2 style='color: #d32f2f; margin-bottom: 15px;'><i class='fas fa-shield-alt'></i> {$titulo}</h2>";
-        echo "<p style='color: #555; font-size: 1.1em;'>{$mensagem}</p>";
-        echo "<a href='" . BASE_URL . "' class='btn btn-primary' style='margin-top: 20px;'>Voltar ao Início</a>";
-        echo "</div>";
+        require $errorFile;
 
         if (file_exists($footer)) require_once $footer;
     }

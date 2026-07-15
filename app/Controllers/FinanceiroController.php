@@ -339,9 +339,8 @@ class FinanceiroController extends BaseController
         
         $dentistas = [];
         if (\is_admin()) {
-            $stmt = $this->pdo->prepare("SELECT id, nome FROM usuarios WHERE perfil = 'dentista' AND clinica_id = ? ORDER BY nome");
-            $stmt->execute([$this->clinica_id]);
-            $dentistas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $usuarioModel = new \App\Models\Usuario($this->pdo, $this->clinica_id);
+            $dentistas = $usuarioModel->getDentistas();
         }
 
         $relatorio_dentistas = $atendimentoModel->obterFaturamentoPorDentistaPeriodo($data_inicio, $data_fim, $dentista_id);
