@@ -99,8 +99,8 @@ class Usuario {
     }
 
     public function temAtendimentos($id) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM atendimentos WHERE id_dentista = ?");
-        $stmt->execute([$id]);
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM atendimentos WHERE id_dentista = ? AND clinica_id = ?");
+        $stmt->execute([$id, $this->clinica_id]);
         return $stmt->fetchColumn() > 0;
     }
 }

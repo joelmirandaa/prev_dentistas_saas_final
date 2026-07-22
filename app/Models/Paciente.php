@@ -357,8 +357,8 @@ class Paciente
             }
         }
 
-        $stmt = $this->pdo->prepare("UPDATE atendimento_procedimentos SET url_arquivo = NULL WHERE id = ?");
-        return $stmt->execute([$idProcedimento]);
+        $stmt = $this->pdo->prepare("UPDATE atendimento_procedimentos SET url_arquivo = NULL WHERE id = ? AND clinica_id = ?");
+        return $stmt->execute([$idProcedimento, $this->clinica_id]);
     }
 
     public function removerProcedimento(int $idProcedimento)
@@ -389,13 +389,24 @@ class Paciente
             }
         }
 
-        $stmt = $this->pdo->prepare("DELETE FROM atendimento_procedimentos WHERE id = ?");
-        return $stmt->execute([$idProcedimento]);
+        $stmt = $this->pdo->prepare("DELETE FROM atendimento_procedimentos WHERE id = ? AND clinica_id = ?");
+        return $stmt->execute([$idProcedimento, $this->clinica_id]);
     }
 
     public function salvarArquivo(int $idProcedimento, string $relativeUrl)
     {
-        $stmt = $this->pdo->prepare("UPDATE atendimento_procedimentos SET url_arquivo = ? WHERE id = ?");
-        return $stmt->execute([$relativeUrl, $idProcedimento]);
+        // Valida se o procedimento pertence a esta clinica
+        $stmtCheck = $this->pdo->prepare("
+            SELECT ap.id FROM atendimento_procedimentos ap
+            JOIN atendimentos a ON ap.id_atendimento = a.id
+            WHERE ap.id = ? AND a.clinica_id = ?
+        ");
+        $stmtCheck->execute([$idProcedimento, $this->clinica_id]);
+        if (!$stmtCheck->fetch()) {
+            throw new Exception("Procedimento não encontrado ou não pertence a esta clínica.");
+        }
+
+        $stmt = $this->pdo->prepare("UPDATE atendimento_procedimentos SET url_arquivo = ? WHERE id = ? AND clinica_id = ?");
+        return $stmt->execute([$relativeUrl, $idProcedimento, $this->clinica_id]);
     }
 }
