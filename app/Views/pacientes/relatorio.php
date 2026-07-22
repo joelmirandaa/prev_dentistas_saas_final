@@ -537,12 +537,13 @@
                 const container = button.closest('.arquivo-container');
 
                 showConfirm('Remover Anexo', 'Você realmente deseja apagar esse arquivo?', function() {
+                    const csrfToken = document.querySelector('input[name="csrf_token"]').value;
                     fetch('<?= BASE_URL ?>pacientes/remover-anexo', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded',
                         },
-                        body: 'id_procedimento=' + encodeURIComponent(idProcedimento)
+                        body: 'id_procedimento=' + encodeURIComponent(idProcedimento) + '&csrf_token=' + encodeURIComponent(csrfToken)
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -570,12 +571,13 @@
 
                 if (statusExecucao.toLowerCase() === 'pendente' && statusPagamento.toLowerCase() === 'nao_aplicavel') {
                     showConfirm('Remover Procedimento', 'Você realmente deseja remover este procedimento?', function() {
+                        const csrfToken = document.querySelector('input[name="csrf_token"]').value;
                         fetch('<?= BASE_URL ?>pacientes/remover-procedimento', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded',
                             },
-                            body: 'id_procedimento=' + encodeURIComponent(idProcedimento)
+                            body: 'id_procedimento=' + encodeURIComponent(idProcedimento) + '&csrf_token=' + encodeURIComponent(csrfToken)
                         })
                         .then(response => response.json())
                         .then(data => {
