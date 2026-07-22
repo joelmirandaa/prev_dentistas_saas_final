@@ -115,9 +115,13 @@
                         <td data-label="Nome"><?= htmlspecialchars($paciente['nome']) ?></td>
                         <td data-label="CPF"><?= htmlspecialchars($paciente['cpf'] ?? '') ?></td>
                         <td data-label="Telefone"><?= htmlspecialchars($paciente['telefone'] ?? '') ?></td>
-                        <td data-label="Ações" style="display: flex; gap: 0.5rem;">
+                        <td data-label="Ações" style="display: flex; gap: 0.5rem; align-items: center;">
                             <a href="<?= BASE_URL ?>pacientes/editar?id=<?= $paciente['id'] ?>" class="btn btn-primary">Editar</a>
-                            <a href="<?= BASE_URL ?>pacientes/excluir?id=<?= $paciente['id'] ?>" class="btn btn-danger" onclick="return confirm('Você realmente deseja remover este paciente? Esta ação não pode ser desfeita.');">Remover</a>
+                            <form action="<?= BASE_URL ?>pacientes/excluir" method="POST" style="display:inline;" onsubmit="return confirm('Você realmente deseja remover este paciente? Esta ação não pode ser desfeita.');">
+                                <?= \App\Helpers\CsrfHelper::input() ?>
+                                <input type="hidden" name="id" value="<?= $paciente['id'] ?>">
+                                <button type="submit" class="btn btn-danger" style="padding: 5px 15px; font-size: 0.875rem; border-radius: 30px; cursor: pointer;">Remover</button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>

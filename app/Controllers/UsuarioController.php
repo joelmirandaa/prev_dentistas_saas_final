@@ -103,7 +103,12 @@ class UsuarioController extends BaseController {
             exit;
         }
 
-        $id = $_GET['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: " . BASE_URL . "usuarios");
+            exit;
+        }
+
+        $id = $_POST['id'] ?? null;
         if (!$id) {
             header("Location: " . BASE_URL . "usuarios");
             exit;

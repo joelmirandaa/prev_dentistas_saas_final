@@ -57,7 +57,11 @@
                         <td>R$ <?= number_format($despesa['valor'], 2, ',', '.') ?></td>
                         <td><?= ucfirst($despesa['tipo']) ?></td>
                         <td>
-                            <a href="<?= BASE_URL ?>financeiro/despesas/excluir?id=<?= $despesa['id'] ?>" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja remover esta despesa?');">Remover</a>
+                            <form action="<?= BASE_URL ?>financeiro/despesas/excluir" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja remover esta despesa?');">
+                                <?= \App\Helpers\CsrfHelper::input() ?>
+                                <input type="hidden" name="id" value="<?= $despesa['id'] ?>">
+                                <button type="submit" class="btn btn-danger" style="padding: 5px 15px; font-size: 0.875rem; border-radius: 30px; cursor: pointer;">Remover</button>
+                            </form>
                         </td>
                     </tr>
                 <?php endforeach; ?>

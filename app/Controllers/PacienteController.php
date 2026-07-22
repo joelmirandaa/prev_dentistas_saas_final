@@ -102,6 +102,11 @@ class PacienteController extends BaseController
      */
     public function excluir($id)
     {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: " . BASE_URL . "pacientes");
+            exit;
+        }
+
         try {
             $this->pacienteModel->delete((int)$id);
             $_SESSION['feedback'] = ['type' => 'success', 'message' => 'Paciente excluído com sucesso!'];

@@ -75,7 +75,7 @@ if (strpos($uri, 'pacientes') === 0 || $uri === 'editar_paciente.php') {
     } elseif ($uri === 'pacientes/salvar' || $uri === 'actions/salvar_paciente.php') {
         $controller->salvar();
     } elseif ($uri === 'pacientes/excluir' || $uri === 'actions/excluir_paciente.php') {
-        $id = $_GET['id'] ?? null;
+        $id = $_POST['id'] ?? null;
         $controller->excluir($id);
     } elseif ($uri === 'pacientes/buscar' || $uri === 'actions/buscar_paciente.php') {
         $controller->apiBuscar();

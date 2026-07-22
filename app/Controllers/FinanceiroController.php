@@ -132,7 +132,12 @@ class FinanceiroController extends BaseController
 
     public function excluirDespesa(): void
     {
-        $id = $_GET['id'] ?? null;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: " . BASE_URL . "financeiro/despesas");
+            exit;
+        }
+
+        $id = $_POST['id'] ?? null;
         if ($id) {
             try {
                 $despesaModel = new Despesa($this->pdo, $this->clinica_id);

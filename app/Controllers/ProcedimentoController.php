@@ -106,7 +106,12 @@ class ProcedimentoController extends BaseController
 
     public function excluir(): void
     {
-        $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header("Location: " . BASE_URL . "procedimentos");
+            exit;
+        }
+
+        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
 
         if ($id <= 0) {
             header("Location: " . BASE_URL . "procedimentos");
